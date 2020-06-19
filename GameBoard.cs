@@ -13,9 +13,9 @@ public class GameBoard : MonoBehaviour
     }
 
     [SerializeField]
-    private Transform _cell;
+    private GameObject _cell;
 
-    public Transform Cell
+    public GameObject Cell
     {
         get { return _cell; }
         set { _cell = value; }
@@ -47,17 +47,39 @@ public class GameBoard : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     private void Update()
     {
-        
+
+    }
+
+    private void Reset()
+    {
+        _size = new Vector2Int(_defaultSizeX, _defaultSizeY);
     }
 
     private void InitializeBoard()
     {
-        Cell.localScale = new Vector3(CellSize.x, CellSize.y, 1f);
+        if (Size.x < 0 || Size.y < 0)
+        {
+            Debug.LogError("Can't use negative size for board");
+        }
+
+        Cell.transform.localScale = new Vector3(CellSize.x, CellSize.y, 1f);
+
+        // Place tiles (cells) on the Scene
+
+        for (int x = 0; x < Size.x; x++)
+        {
+            for (int y = 0; y < Size.y; y++)
+            {
+                var tile = Instantiate(Cell);
+                tile.transform.SetParent(transform, false);
+                tile.transform.localPosition = new Vector3(x * CellSize.x, transform.position.y, y * CellSize.y);
+            }
+        }
     }
 }
