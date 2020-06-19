@@ -7,6 +7,8 @@ public class GameBoard : MonoBehaviour
     private readonly int _defaultSizeX = 10;
     private readonly int _defaultSizeY = 10;
 
+    private GameObject[,] _boardCells;
+
     public GameBoard()
     {
         _size = new Vector2Int(_defaultSizeX, _defaultSizeY);
@@ -72,6 +74,8 @@ public class GameBoard : MonoBehaviour
 
         // Place tiles (cells) on the Scene
 
+        _boardCells = new GameObject[Size.x, Size.y];
+
         for (int x = 0; x < Size.x; x++)
         {
             for (int y = 0; y < Size.y; y++)
@@ -79,6 +83,8 @@ public class GameBoard : MonoBehaviour
                 var tile = Instantiate(Cell);
                 tile.transform.SetParent(transform, false);
                 tile.transform.localPosition = new Vector3(x * CellSize.x, transform.position.y, y * CellSize.y);
+
+                _boardCells[x, y] = tile;
             }
         }
     }
